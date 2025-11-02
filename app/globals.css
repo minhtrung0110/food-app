@@ -1,0 +1,72 @@
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css';
+
+@import 'nativewind/theme';
+
+@theme {
+    --color-white: #fff;
+    --color-black: #000;
+
+    --color-primary-500: #FF8B00;          /* dùng bg-primary, text-primary */
+    --color-primary-400: #FF991F;
+    --color-primary-300: #FFAB00;
+    --color-primary-200: #FFC400;
+    --color-primary-100: #FFE380;
+    --color-primary-75: #FFF0B3;
+    --color-primary-50: #FFFAE5;
+
+    --color-neutral-400:#505F79;
+    --color-neutral-300:#5E6C84;
+    --color-neutral-200:#6B778C;
+    --color-neutral-100:#7A869A;
+    --color-neutral-90: #8993A4;
+    --color-neutral-80: #97A0AF;
+    --color-neutral-70: #A5ADBA;
+    --color-neutral-60: #B3BAC5;
+    --color-neutral-50: #C1C7D0;
+    --color-neutral-40: #DFE1E6;
+    --color-neutral-42: #F4F5F7;
+    --color-neutral-01: #FAFBFC;
+
+    --color-teal-500:#008DA6;
+    --color-teal-400:#00A3BF;
+    --color-teal-300:#00B8D9;
+    --color-teal-200:#00C7E6;
+    --color-teal-100:#79E2F2;
+    --color-teal-75:#B3F5FF;
+    --color-teal-50:#E6FCFF;
+
+    --color-purple-500:#403294;
+    --color-purple-400:#5243AA;
+    --color-purple-300:#6554C0;
+    --color-purple-200:#8777D9;
+    --color-purple-100:#998DD9;
+    --color-purple-75:#C0B6F2;
+    --color-purple-50:#EAE6FF;
+
+    --color-green-500:#006644;
+    --color-green-400:#00875A;
+    --color-green-300:#36B37E;
+    --color-green-200:#57D9A3;
+    --color-green-100:#79F2C0;
+    --color-green-75:#ABF5D1;
+    --color-green-50:#E2FFEE;
+
+    --color-blue-600:#063F94;
+    --color-blue-500:#0747A6;
+    --color-blue-400:#0052CC;
+    --color-blue-300:#0065FF;
+    --color-blue-200:#2684FF;
+    --color-blue-75:#B3D4FF;
+    --color-blue-50:#DEEBFF;
+
+
+
+
+}
+
+/* (optional) Dark mode override */
+@theme .dark {
+
+}
