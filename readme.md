@@ -45,7 +45,7 @@ The user flow:
 
 
 <!-- Code stats (optional) -->
-<img src="https://tokei.rs/b1/github/minhtrung0110/food-app?category=code" alt="Lines of code" />
+<img src="https://img.shields.io/endpoint?url=https://tokei.kojix2.net/b1/github/minhtrung0110/food-app?category=code&style=for-the-badge" />
 <img src="https://img.shields.io/github/downloads/minhtrung0110/food-app/total?style=for-the-badge" alt="Total downloads (releases)" />
 </p>
 

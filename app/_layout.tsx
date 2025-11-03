@@ -1,26 +1,35 @@
-import { Stack } from "expo-router";
-import "./globals.css";
-import { StatusBar } from "react-native";
+import { Stack } from 'expo-router';
+import './globals.css';
+import { authStore } from '@/stores/auth';
+import { useShallow } from 'zustand/react/shallow';
+import { useEffect } from 'react';
+import { ConfirmProvider } from '@/providers/ConfirmProvider';
 
 export default function RootLayout() {
-    return (
-        <>
-            <StatusBar hidden={true} />
+  const { ready, accessToken, boot } = authStore(
+    useShallow((s) => ({ ready: s.ready, accessToken: s.accessToken, boot: s.boot }))
+  );
 
-            <Stack>
-                <Stack.Screen
-                    name="(tabs)"
-                    options={{
-                        headerShown: false,
-                    }}
-                />
-                {/*<Stack.Screen*/}
-                {/*    name="movie/[id]"*/}
-                {/*    options={{*/}
-                {/*        headerShown: false,*/}
-                {/*    }}*/}
-                {/*/>*/}
-            </Stack>
-        </>
-    );
+  useEffect(() => {
+    boot();
+  }, []);
+
+  if (!ready) return null;
+
+  return (
+    <>
+      {/*<StatusBar hidden={true} />*/}
+      <ConfirmProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          {accessToken ? <Stack.Screen name="(tabs)" /> : <Stack.Screen name="(auth)" />}
+          {/*<Stack.Screen*/}
+          {/*    name="movie/[id]"*/}
+          {/*    options={{*/}
+          {/*        headerShown: false,*/}
+          {/*    }}*/}
+          {/*/>*/}
+        </Stack>
+      </ConfirmProvider>
+    </>
+  );
 }

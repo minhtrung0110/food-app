@@ -1,8 +1,16 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Stack } from 'expo-router';
 
 const AuthLayout = () => {
-  return <View className="bg-white"></View>;
+  return (
+    <>
+      <Stack initialRouteName={'getting-started'} screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="getting-started" />
+        <Stack.Screen name="login" />
+        {/* thêm signup, phone, address nếu bạn muốn cũng ở nhóm (auth) */}
+      </Stack>
+    </>
+  );
 };
 
 export default AuthLayout;
