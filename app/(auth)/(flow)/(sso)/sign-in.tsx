@@ -1,16 +1,18 @@
 import React, { useTransition } from 'react';
-import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, Text, View } from 'react-native';
-import { Button } from '@/components/atoms/Button';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { IconFacebook, IconGoogle } from '@/components/atoms/Icons/logo';
 import { useForm } from 'react-hook-form';
 import FormInput from '@/components/molecules/form/FormInput';
 import FormInputPassword from '@/components/molecules/form/FormInputPassword';
 import { FormSignInData, signInSchema } from '@/libs/schema/sign-in';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { cn } from '@/utils/style';
+import AlertDialog from '@/components/molecules/modals/AlertDialog';
+import { ROUTES } from '@/constants/route';
 
-export default function Login() {
+export default function SignIn() {
   const router = useRouter();
+  const [open, setOpen] = React.useState(false);
   const [isPending, startTransition] = useTransition();
 
   const {
@@ -34,36 +36,24 @@ export default function Login() {
       // 2) Sau khi thành công, bọc CẬP NHẬT UI trong transition
       startTransition(() => {
         // ví dụ: điều hướng & set state nặng (nếu có)
-        router.replace('/(tabs)');
+        router.push('/(tabs)');
       });
     } catch (e: any) {
-      Alert.alert('Error', e?.message || 'Login failed !');
+      Alert.alert('Error', e?.message || 'SignIn failed !');
     }
   });
 
   const onForgotPassword = () => {
-    // router.push('/(auth)/forgot-password')
-    Alert.alert('Forgot Password', 'Đi tới màn hình đặt lại mật khẩu.');
+    setOpen(true);
   };
-
-  async function onGetStarted() {
-    //await completeIntro();
-    router.replace('/(auth)/getting-started');
-  }
 
   async function gotoCreateAccount() {
     //await completeIntro();
-    router.replace('/(auth)/signup');
+    router.push(ROUTES.AUTH.signUp);
   }
   const disabled = !isValid || isSubmitting || isPending;
   return (
-    <View className="mx-auto h-full w-full bg-white px-8 py-16">
-      <View className={'mx-auto w-full items-center'}>
-        <Image
-          source={require('@/assets/images/logo.png')}
-          style={{ width: 170, height: 170, resizeMode: 'contain' }}
-        />
-      </View>
+    <>
       <View className={'mx-auto mt-12 w-full'}>
         <Text className="text-center text-2xl leading-8 font-bold text-neutral-800">
           Welcome Back
@@ -100,7 +90,7 @@ export default function Login() {
             name="password"
             control={control}
             label=""
-            placeholder="••••••••"
+            placeholder="Enter your password"
             containerClassName="mb-6"
           />
 
@@ -118,37 +108,33 @@ export default function Login() {
           </Pressable>
 
           {/* Forgot password */}
-          <Pressable onPress={onForgotPassword} className="mt-4">
-            <Text className="text-center font-medium text-amber-500">Forgot Password?</Text>
+          <Pressable
+            onPress={onForgotPassword}
+            android_ripple={{ color: 'rgba(0,0,0,0.08)' }}
+            hitSlop={8}
+            className="mt-4 rounded-xl">
+            {({ pressed }) => (
+              <Text
+                className={cn(
+                  'text-primary-500 text-center font-medium',
+                  pressed && 'text-primary-400 font-semibold underline'
+                )}>
+                Forgot Password?
+              </Text>
+            )}
           </Pressable>
         </View>
       </KeyboardAvoidingView>
-      <View>
-        {/* OR divider */}
-        <View className="my-4 flex-row items-center">
-          <View className="bg-neutral-40 h-[2px] flex-1" />
-          <Text className="mx-3 text-xl font-normal text-neutral-500">OR</Text>
-          <View className="bg-neutral-40 h-[2px] flex-1" />
-        </View>
-
-        <Button
-          variant={'neutral'}
-          label={'Connect with Facebook'}
-          textClassName={'leading-6'}
-          className={'h-auto px-10 py-4'}
-          leftClassName={'mr-8'}
-          leftIcon={<IconFacebook />}
-        />
-        <Button
-          variant={'neutral'}
-          label={'Connect with Google'}
-          textClassName={'leading-6'}
-          className={'my-3 h-auto px-10 py-4'}
-          leftClassName={'mr-8'}
-          leftIcon={<IconGoogle />}
-        />
-        <Button variant={'outline'} label={'Back'} onPress={onGetStarted} className={'my-6'} />
-      </View>
-    </View>
+      <AlertDialog
+        title={'Forgot Password'}
+        message={'You will be redirected to the password recovery page.'}
+        visible={open}
+        onCancel={() => setOpen(false)}
+        onConfirm={() => {
+          setOpen(false);
+          router.push(ROUTES.AUTH.forgotPassword);
+        }}
+      />
+    </>
   );
 }

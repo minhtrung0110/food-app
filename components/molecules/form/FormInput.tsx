@@ -2,8 +2,8 @@
 import React from 'react';
 import { Text, TextInput, TextInputProps, View } from 'react-native';
 import { Control, Controller, FieldValues, get, Path, useFormState } from 'react-hook-form';
-import { cn } from '@/utils/style';
-import { CircleCheckIcon } from 'lucide-react-native';
+import IconCircleCheck from '@/components/atoms/Icons/filled/IconCircleTick';
+import { COLOR } from '@/constants/Colors';
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
@@ -55,14 +55,11 @@ export default function FormInput<T extends FieldValues>({
         />
 
         {/* IconCircleTick: xanh khi hợp lệ, xám khi chưa hợp lệ */}
-        <CircleCheckIcon
-          color={''}
-          className={cn(!isValid ? 'text-neutral-400' : 'text-green-500')}
-        />
+        <IconCircleCheck color={isValid ? COLOR.green['500'] : COLOR.neutral['300']} />
       </View>
 
       {!!fieldError && (
-        <Text className="mt-1 text-xs text-red-500">
+        <Text className="mt-1 text-sm text-red-500">
           {(fieldError.message as string) || 'Invalid'}
         </Text>
       )}

@@ -1,11 +1,7 @@
-// src/theme/colors.ts
-// Bám theo globals.css (NativeWind @theme) của bạn
-// Mọi giá trị đánh dấu `as const` để có type an toàn.
-
+// colors.ts
 export const COLOR = {
   white: '#fff',
   black: '#000',
-
   primary: {
     500: '#FF8B00',
     400: '#FF991F',
@@ -15,7 +11,6 @@ export const COLOR = {
     75: '#FFF0B3',
     50: '#FFFAE5',
   },
-
   neutral: {
     400: '#505F79',
     300: '#5E6C84',
@@ -28,9 +23,8 @@ export const COLOR = {
     50: '#C1C7D0',
     40: '#DFE1E6',
     42: '#F4F5F7',
-    '01': '#FAFBFC', // giữ nguyên key '01'
+    '01': '#FAFBFC',
   },
-
   teal: {
     500: '#008DA6',
     400: '#00A3BF',
@@ -40,7 +34,6 @@ export const COLOR = {
     75: '#B3F5FF',
     50: '#E6FCFF',
   },
-
   purple: {
     500: '#403294',
     400: '#5243AA',
@@ -50,7 +43,6 @@ export const COLOR = {
     75: '#C0B6F2',
     50: '#EAE6FF',
   },
-
   green: {
     500: '#006644',
     400: '#00875A',
@@ -60,7 +52,6 @@ export const COLOR = {
     75: '#ABF5D1',
     50: '#E2FFEE',
   },
-
   blue: {
     600: '#063F94',
     500: '#0747A6',
@@ -70,29 +61,20 @@ export const COLOR = {
     75: '#B3D4FF',
     50: '#DEEBFF',
   },
+  overlay: {
+    light: 'rgba(255, 255, 255, 0.6)',
+    medium: 'rgba(0, 0, 0, 0.3)',
+    dark: 'rgba(0, 0, 0, 0.6)',
+  },
 } as const;
 
-// ---- TYPES ----
-type ShadeKey = keyof (typeof COLOR)['primary'] | '600' | '42' | '01'; // union các shade có mặt
-type FamilyKey = keyof typeof COLOR; // 'white' | 'black' | 'primary' | ...
-
-// Với family có shade:
-type PaletteFamily = Exclude<FamilyKey, 'white' | 'black'>;
-
-// Tạo union 'primary-500' | 'neutral-42' | ...
-export type FlatColorKey =
-  | 'white'
-  | 'black'
-  | `${PaletteFamily}-${Exclude<ShadeKey, '600' | '01' | '42'>}` // phổ biến
-  | 'blue-600'
-  | 'neutral-42'
-  | 'neutral-01';
-
-// ---- FLAT MAP ----
-export const FLAT_COLOR: Record<FlatColorKey, string> = {
+// ---- FLAT MAP (để TS tự suy ra union key) ----
+export const FLAT_COLOR = {
+  // base
   white: COLOR.white,
   black: COLOR.black,
 
+  // primary
   'primary-500': COLOR.primary[500],
   'primary-400': COLOR.primary[400],
   'primary-300': COLOR.primary[300],
@@ -101,6 +83,7 @@ export const FLAT_COLOR: Record<FlatColorKey, string> = {
   'primary-75': COLOR.primary[75],
   'primary-50': COLOR.primary[50],
 
+  // neutral (đủ cả 90/80/70/60/42/01)
   'neutral-400': COLOR.neutral[400],
   'neutral-300': COLOR.neutral[300],
   'neutral-200': COLOR.neutral[200],
@@ -114,6 +97,7 @@ export const FLAT_COLOR: Record<FlatColorKey, string> = {
   'neutral-42': COLOR.neutral[42],
   'neutral-01': COLOR.neutral['01'],
 
+  // teal
   'teal-500': COLOR.teal[500],
   'teal-400': COLOR.teal[400],
   'teal-300': COLOR.teal[300],
@@ -122,6 +106,7 @@ export const FLAT_COLOR: Record<FlatColorKey, string> = {
   'teal-75': COLOR.teal[75],
   'teal-50': COLOR.teal[50],
 
+  // purple
   'purple-500': COLOR.purple[500],
   'purple-400': COLOR.purple[400],
   'purple-300': COLOR.purple[300],
@@ -130,6 +115,7 @@ export const FLAT_COLOR: Record<FlatColorKey, string> = {
   'purple-75': COLOR.purple[75],
   'purple-50': COLOR.purple[50],
 
+  // green
   'green-500': COLOR.green[500],
   'green-400': COLOR.green[400],
   'green-300': COLOR.green[300],
@@ -138,6 +124,7 @@ export const FLAT_COLOR: Record<FlatColorKey, string> = {
   'green-75': COLOR.green[75],
   'green-50': COLOR.green[50],
 
+  // blue (có 600)
   'blue-600': COLOR.blue[600],
   'blue-500': COLOR.blue[500],
   'blue-400': COLOR.blue[400],
@@ -147,12 +134,13 @@ export const FLAT_COLOR: Record<FlatColorKey, string> = {
   'blue-50': COLOR.blue[50],
 } as const;
 
-// ---- HELPERS ----
+// Union key TỰ ĐỘNG từ object trên (không còn sai TS2353)
+export type FlatColorKey = keyof typeof FLAT_COLOR;
 
-// Lấy nhanh màu phẳng: getColor('primary-500')
-export function getColor(name: FlatColorKey): string {
-  return FLAT_COLOR[name];
+// Helper gõ an toàn
+export function getColor<K extends FlatColorKey>(k: K): (typeof FLAT_COLOR)[K] {
+  return FLAT_COLOR[k];
 }
 
-// Alias tiện: COLOR.PRIMARY = primary-500 (brand)
+// Shortcut brand
 export const BRAND_PRIMARY = COLOR.primary[500] as string;

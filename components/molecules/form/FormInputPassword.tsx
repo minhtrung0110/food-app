@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Pressable, Text, TextInput, TextInputProps, View } from 'react-native';
 import { Control, Controller, FieldValues, get, Path, useFormState } from 'react-hook-form';
 import { Eye, EyeOff } from 'lucide-react-native';
+import { COLOR } from '@/constants/Colors';
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
@@ -76,7 +77,11 @@ export default function FormInputPassword<T extends FieldValues>({
           className="my-2"
           accessibilityRole="button"
           accessibilityLabel={visible ? 'Hide password' : 'Show password'}>
-          {visible ? <Eye size={22} /> : <EyeOff size={22} />}
+          {visible ? (
+            <Eye size={22} color={COLOR.neutral['300']} />
+          ) : (
+            <EyeOff size={22} color={COLOR.neutral['300']} />
+          )}
         </Pressable>
       </View>
 

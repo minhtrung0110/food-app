@@ -12,6 +12,7 @@ import { useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Button } from '@/components/atoms/Button';
 import useConfirmExitOnBack from '@/hooks/useConfirmExitOnBack';
+import { ROUTES } from '@/constants/route';
 
 type Slide = {
   image: ImageSourcePropType;
@@ -49,7 +50,7 @@ export default function GettingStarted() {
     setIndex(Math.round(x / width));
   }
 
-  const onGetStarted = () => router.replace('/(auth)/login');
+  const onGetStarted = () => router.push(ROUTES.AUTH.signIn);
 
   return (
     <View className="flex-1 bg-white">

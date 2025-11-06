@@ -1,36 +1,35 @@
-// components/overlays/ConfirmModal.tsx
+// components/overlays/AlertDialog.tsx
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { COLOR } from '@/constants/Colors';
 
-export type ConfirmModalProps = {
+type Props = {
   visible: boolean;
   title?: string;
   message?: string;
   confirmText?: string;
   cancelText?: string;
-  destructive?: boolean;
-  closable?: boolean; // chạm nền để đóng (mặc định true)
-  onCancel: () => void;
-  onConfirm: () => void;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  closable?: boolean; // chạm nền để đóng
 };
 
-export default function ConfirmModal({
+export default function AlertDialog({
   visible,
-  title = 'Are you sure?',
-  message = 'Please confirm your action.',
-  confirmText = 'Confirm',
+  title = 'Forgot Password',
+  message = 'Go to reset password screen?',
+  confirmText = 'OK',
   cancelText = 'Cancel',
-  destructive = false,
-  closable = true,
-  onCancel,
   onConfirm,
-}: ConfirmModalProps) {
-  const fade = useRef(new Animated.Value(0)).current; // dim + card opacity
+  onCancel,
+  closable = true,
+}: Props) {
+  const fade = useRef(new Animated.Value(0)).current; // dim
   const translate = useRef(new Animated.Value(24)).current; // slide up 24px
 
   useEffect(() => {
     if (visible) {
+      // show
       Animated.parallel([
         Animated.timing(fade, {
           toValue: 1,
@@ -46,7 +45,7 @@ export default function ConfirmModal({
         }),
       ]).start();
     } else {
-      // reset để lần sau mở lại có animation từ dưới lên
+      // reset ngay để lần sau vào từ dưới lên
       fade.setValue(0);
       translate.setValue(24);
     }
@@ -58,39 +57,30 @@ export default function ConfirmModal({
       transparent
       statusBarTranslucent
       animationType="none"
-      hardwareAccelerated
-      onRequestClose={onCancel} // Android back
-    >
-      {/* overlay full-screen để canh giữa */}
+      hardwareAccelerated>
+      {/* Lớp phủ toàn màn hình để căn giữa */}
       <View style={[styles.fill, styles.center]}>
-        {/* dim nền */}
+        {/* DIM nền (full-screen) */}
         <Animated.View
-          style={[styles.fill, { backgroundColor: COLOR.overlay['medium'], opacity: fade }]}
+          style={[styles.fill, { backgroundColor: COLOR.overlay['dark'], opacity: fade }]}
+          // chạm nền để đóng (nếu cho phép)
           pointerEvents={closable ? 'auto' : 'none'}>
           {closable && <Pressable style={styles.fill} onPress={onCancel} />}
         </Animated.View>
 
-        {/* card: slide + fade */}
+        {/* CARD: slide + fade */}
         <Animated.View style={{ transform: [{ translateY: translate }], opacity: fade }}>
           <View className="w-[88%] rounded-2xl bg-white p-5">
-            {!!title && <Text className="text-lg font-semibold text-neutral-900">{title}</Text>}
-            {!!message && <Text className="mt-2 text-neutral-400">{message}</Text>}
+            {!!title && (
+              <Text className="mb-1 text-lg font-semibold text-neutral-800">{title}</Text>
+            )}
+            {!!message && <Text className="mb-4 text-neutral-400">{message}</Text>}
 
-            <View className="mt-5 flex-row gap-3">
-              <Pressable
-                onPress={onCancel}
-                className="flex-1 items-center justify-center rounded-xl border border-neutral-300 px-4 py-3"
-                android_ripple={{ color: 'rgba(0,0,0,0.06)' }}>
-                <Text className="font-medium text-neutral-700">{cancelText}</Text>
+            <View className="mt-2 flex-row justify-end gap-3">
+              <Pressable onPress={onCancel} className="rounded-xl px-4 py-3">
+                <Text className="font-medium text-neutral-400">{cancelText}</Text>
               </Pressable>
-
-              <Pressable
-                onPress={onConfirm}
-                className={[
-                  'flex-1 items-center justify-center rounded-xl px-4 py-3',
-                  destructive ? 'bg-red-500' : 'bg-primary-500',
-                ].join(' ')}
-                android_ripple={{ color: 'rgba(255,255,255,0.15)' }}>
+              <Pressable onPress={onConfirm} className="rounded-xl bg-red-500 px-6 py-3">
                 <Text className="font-semibold text-white">{confirmText}</Text>
               </Pressable>
             </View>

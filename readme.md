@@ -76,7 +76,7 @@ The user flow:
 │
 ├── (auth)/
 │   ├── _layout.tsx
-│   ├── login.tsx
+│   ├── sign-in.tsx
 │   └── signup.tsx
 │
 ├── (onboarding)/
@@ -130,7 +130,7 @@ Centralized in `useAuthGuard()` inside `contexts/session.tsx`:
 ## 🧭 Main Features
 
 - ✅ **Intro Slider** – image carousel + dots + “Get Started” button
-- 🔑 **Authentication** – Login & Signup flows
+- 🔑 **Authentication** – SignIn & Signup flows
 - 📱 **Onboarding** – Phone number & address form
 - 🗺️ **Tabs Navigation** – Home, Search, Orders, Profile
 - 🧭 **Guarded Routing** – Automatically redirects between sections
@@ -165,7 +165,7 @@ Create a `.env` file in the root directory and add your environment variables as
 
 ## 🧩 API Integration
 
-Replace the fakeToken inside app/(auth)/login.tsx with a real backend login API.
+Replace the fakeToken inside app/(auth)/sign-in.tsx with a real backend login API.
 
 Save the access token via SecureStore.
 
