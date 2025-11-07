@@ -1,6 +1,9 @@
 import React, { forwardRef, useState } from 'react';
 import { Pressable, TextInput, TextInputProps, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { IconCircleClose, IconLocation } from '@/components/atoms/Icons/filled';
+import { cn } from '@/utils/style';
+import { COLOR } from '@/constants/Colors';
 
 type InputFrameProps = TextInputProps & {
   value: string;
@@ -27,43 +30,40 @@ const InputFrame = forwardRef<TextInput, InputFrameProps>(
     const [focused, setFocused] = useState(false);
 
     return (
-      <View className="relative">
-        <View
-          className={[
-            'flex-row items-center rounded-full px-4',
-            'border bg-white',
-            focused ? 'border-blue-300' : 'border-neutral-40',
-          ].join(' ')}
-          style={{ height: 44 }}>
-          <Ionicons name={leftIconName} size={18} color="#97A0AF" style={{ marginRight: 6 }} />
-          <TextInput
-            ref={ref}
-            value={value}
-            onChangeText={onChangeText}
-            editable={!disabled}
-            placeholder={placeholder}
-            placeholderTextColor="#A5ADBA"
-            className="flex-1 text-base text-neutral-800"
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            {...rest}
-          />
-          {value?.length > 0 ? (
-            <Pressable
-              hitSlop={10}
-              onPress={() => {
-                onClear?.();
-              }}
-              className="ml-2">
-              <View className="bg-neutral-42 h-6 w-6 items-center justify-center rounded-full">
-                <Ionicons name="close" size={14} color="#505F79" />
-              </View>
-            </Pressable>
-          ) : null}
-        </View>
+      <View
+        className={cn(
+          'bg-neutral-42 border-neutral-40 flex flex-row items-center rounded-2xl border px-4'
+        )}>
+        <IconLocation
+          width={24}
+          height={24}
+          color={focused ? COLOR.neutral['200'] : COLOR.neutral['50']}
+        />
+        <TextInput
+          ref={ref}
+          value={value}
+          onChangeText={onChangeText}
+          editable={!disabled}
+          placeholder={placeholder}
+          placeholderTextColor="#A5ADBA"
+          className="flex-1 text-base leading-6 font-medium text-neutral-800"
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          {...rest}
+        />
+        {value?.length > 0 ? (
+          <Pressable
+            hitSlop={10}
+            onPress={() => {
+              onClear?.();
+            }}
+            className="ml-2">
+            <IconCircleClose />
+          </Pressable>
+        ) : null}
       </View>
     );
   }
 );
-
+InputFrame.displayName = 'InputFrame';
 export default InputFrame;

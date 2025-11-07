@@ -31,7 +31,7 @@ export default function FindLocation() {
         </Text>
       </View>
 
-      <View className={'mt-10 space-y-4'}>
+      <View className={'mt-10 flex flex-col gap-4'}>
         <Button
           variant={'neutral'}
           label={'Use current location'}

@@ -86,10 +86,7 @@ export default function LocationComboBox({
       {open ? (
         <>
           {/* bấm ngoài để đóng */}
-          <Pressable
-            className="absolute -top-10 -right-10 -bottom-10 -left-10"
-            onPress={() => setOpen(false)}
-          />
+          <Pressable className="absolute" onPress={() => setOpen(false)} />
           <AutocompleteList
             data={options}
             query={value}

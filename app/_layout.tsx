@@ -4,6 +4,7 @@ import { authStore } from '@/stores/auth';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect } from 'react';
 import { ConfirmProvider } from '@/providers/ConfirmProvider';
+import { StatusBar } from 'expo-status-bar';
 
 export default function RootLayout() {
   const { ready, accessToken, boot } = authStore(
@@ -18,10 +19,10 @@ export default function RootLayout() {
 
   return (
     <>
-      {/*<StatusBar hidden={true} />*/}
+      <StatusBar hidden={false} />
       <ConfirmProvider>
         <Stack screenOptions={{ headerShown: false }}>
-          {accessToken ? <Stack.Screen name="(tabs)" /> : <Stack.Screen name="(auth)" />}
+          {!accessToken ? <Stack.Screen name="(tabs)" /> : <Stack.Screen name="(auth)" />}
           {/*<Stack.Screen*/}
           {/*    name="movie/[id]"*/}
           {/*    options={{*/}

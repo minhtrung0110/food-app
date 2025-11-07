@@ -9,7 +9,7 @@ export const ROUTES = {
     verifyIdentity: `/(auth)/(flow)/verify-identity`,
   },
   TABS: {
-    index: '/(tabs)/index',
+    index: '/(tabs)',
     search: '/(tabs)/search',
     order: '/(tabs)/order',
     profile: '/(tabs)/profile',
