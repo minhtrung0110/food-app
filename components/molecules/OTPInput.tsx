@@ -22,9 +22,9 @@ export default function OtpInput() {
     <OTPInput
       ref={ref}
       onComplete={onComplete}
-      maxLength={5}
+      maxLength={4}
       render={({ slots }) => (
-        <View className="my-4 flex-row items-center justify-center gap-2">
+        <View className="my-4 flex-row items-center justify-center gap-4">
           {slots.map((slot, idx) => (
             <Slot key={idx} {...slot} />
           ))}
@@ -38,9 +38,9 @@ function Slot({ char, isActive, hasFakeCaret }: SlotProps) {
   return (
     <View
       className={cn(
-        `h-[50px] w-[50px] items-center justify-center rounded-lg border border-gray-200 bg-white ${isActive && 'border-2 border-black'}`
+        `h-[65px] w-[65px] items-center justify-center rounded-lg border border-gray-200 bg-white ${isActive && 'border-2 border-black'}`
       )}>
-      {char !== null && <Text className="text-2xl font-medium text-gray-900">{char}</Text>}
+      {char !== null && <Text className="text-3xl font-medium text-neutral-800">{char}</Text>}
       {hasFakeCaret && <FakeCaret />}
     </View>
   );

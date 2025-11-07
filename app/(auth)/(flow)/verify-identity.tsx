@@ -15,10 +15,9 @@ export default function VerifyIdentity() {
   const {
     control,
     handleSubmit,
-    formState: { isValid, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<FormOTPRecoverySchema>({
     resolver: zodResolver(OTPRecoverySchema),
-    mode: 'onChange', // realtime validation
     defaultValues: {
       otp: '',
     },
@@ -43,7 +42,7 @@ export default function VerifyIdentity() {
     //await completeIntro();
     router.push('/(auth)/signup');
   }
-  const disabled = !isValid || isSubmitting || isPending;
+  const disabled = isSubmitting || isPending;
   return (
     <>
       <View className={'mx-auto mt-12 w-full'}>
@@ -64,10 +63,7 @@ export default function VerifyIdentity() {
           <Pressable
             disabled={disabled}
             onPress={onSubmit}
-            className={[
-              'rounded-2xl py-4',
-              disabled ? 'bg-neutral-300 opacity-60' : 'bg-primary-500',
-            ].join(' ')}>
+            className={['rounded-2xl py-4', disabled ? 'opacity-60' : 'bg-primary-500'].join(' ')}>
             <Text className="text-center text-lg font-semibold text-white">
               {isSubmitting || isPending ? 'Going…' : 'Next'}
             </Text>

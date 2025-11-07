@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "food-app",
+    "name": "Food App",
     "slug": "food-app",
     "version": "1.0.0",
 
@@ -25,17 +25,9 @@
     ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "scheme": "movie",
+    "scheme": "food-app",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
       "supportsTablet": true
     },

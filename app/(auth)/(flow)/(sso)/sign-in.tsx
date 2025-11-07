@@ -18,10 +18,10 @@ export default function SignIn() {
   const {
     control,
     handleSubmit,
-    formState: { isValid, isSubmitting },
+    formState: { isSubmitting },
+    reset,
   } = useForm<FormSignInData>({
     resolver: zodResolver(signInSchema),
-    mode: 'onChange', // realtime validation
     defaultValues: {
       email: '',
       password: '',
@@ -37,6 +37,7 @@ export default function SignIn() {
       startTransition(() => {
         // ví dụ: điều hướng & set state nặng (nếu có)
         router.push('/(tabs)');
+        reset({ email: '', password: '' });
       });
     } catch (e: any) {
       Alert.alert('Error', e?.message || 'SignIn failed !');
@@ -51,7 +52,7 @@ export default function SignIn() {
     //await completeIntro();
     router.push(ROUTES.AUTH.signUp);
   }
-  const disabled = !isValid || isSubmitting || isPending;
+
   return (
     <>
       <View className={'mx-auto mt-12 w-full'}>
@@ -96,14 +97,11 @@ export default function SignIn() {
 
           {/* Submit */}
           <Pressable
-            disabled={disabled}
+            disabled={isPending || isSubmitting}
             onPress={onSubmit}
-            className={[
-              'rounded-full py-4',
-              disabled ? 'bg-neutral-300 opacity-60' : 'bg-primary-500',
-            ].join(' ')}>
+            className={`bg-primary-500 rounded-full py-4`}>
             <Text className="text-center text-lg font-semibold text-white">
-              {isSubmitting || isPending ? 'Signing in…' : 'Sign in'}
+              {isPending ? 'Signing in…' : 'Sign in'}
             </Text>
           </Pressable>
 

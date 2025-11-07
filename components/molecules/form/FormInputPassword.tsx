@@ -86,7 +86,7 @@ export default function FormInputPassword<T extends FieldValues>({
       </View>
 
       {!!fieldError && (
-        <Text className="mt-1 text-xs text-red-500">
+        <Text className="mt-1 text-sm text-red-500">
           {(fieldError.message as string) || 'Invalid'}
         </Text>
       )}

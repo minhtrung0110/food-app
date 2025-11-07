@@ -19,10 +19,9 @@ export default function PhoneVerify() {
   const {
     control,
     handleSubmit,
-    formState: { isValid, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<FormSignInData>({
     resolver: zodResolver(signInSchema),
-    mode: 'onChange', // realtime validation
     defaultValues: {
       email: '',
       password: '',
@@ -57,7 +56,7 @@ export default function PhoneVerify() {
     //await completeIntro();
     router.push('/(auth)/signup');
   }
-  const disabled = !isValid || isSubmitting || isPending;
+  const disabled = isSubmitting || isPending;
   return (
     <View className="mx-auto h-full w-full bg-white px-8 py-16">
       <View className={'mx-auto w-full items-center'}>
@@ -110,10 +109,7 @@ export default function PhoneVerify() {
           <Pressable
             disabled={disabled}
             onPress={onSubmit}
-            className={[
-              'rounded-full py-4',
-              disabled ? 'bg-neutral-300 opacity-60' : 'bg-primary-500',
-            ].join(' ')}>
+            className={['rounded-full py-4', disabled ? 'opacity-60' : 'bg-primary-500'].join(' ')}>
             <Text className="text-center text-lg font-semibold text-white">
               {isSubmitting || isPending ? 'Signing in…' : 'Sign in'}
             </Text>

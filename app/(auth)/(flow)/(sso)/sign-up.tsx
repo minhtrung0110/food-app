@@ -18,9 +18,9 @@ export default function Login() {
     control,
     handleSubmit,
     formState: { isValid, isSubmitting },
+    reset,
   } = useForm<FormSignUpData>({
     resolver: zodResolver(signUpSchema),
-    mode: 'onChange', // realtime validation
     defaultValues: {
       name: '',
       email: '',
@@ -37,9 +37,14 @@ export default function Login() {
       startTransition(() => {
         // ví dụ: điều hướng & set state nặng (nếu có)
         router.push('/(tabs)');
+        reset({
+          email: '',
+          name: '',
+          password: '',
+        });
       });
     } catch (e: any) {
-      Alert.alert('Error', e?.message || 'SignIn failed !');
+      Alert.alert('Error', e?.message || 'SignUp failed !');
     }
   });
 
@@ -100,14 +105,11 @@ export default function Login() {
 
           {/* Submit */}
           <Pressable
-            disabled={disabled}
+            disabled={isPending || isSubmitting}
             onPress={onSubmit}
-            className={[
-              'rounded-full py-4',
-              disabled ? 'bg-neutral-300 opacity-60' : 'bg-primary-500',
-            ].join(' ')}>
+            className={'bg-primary-500 rounded-full py-4'}>
             <Text className="text-center text-lg font-semibold text-white">
-              {isSubmitting || isPending ? 'Signing in…' : 'Sign in'}
+              {isPending ? 'Signing up…' : 'Sign Up'}
             </Text>
           </Pressable>
         </View>

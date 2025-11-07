@@ -13,10 +13,9 @@ export default function PasswordReset() {
   const {
     control,
     handleSubmit,
-    formState: { isValid, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<FormResetPasswordSchema>({
     resolver: zodResolver(resetPasswordSchema),
-    mode: 'onChange', // realtime validation
     defaultValues: {
       old_password: '',
       password: '',
@@ -34,11 +33,11 @@ export default function PasswordReset() {
         router.push('/(tabs)');
       });
     } catch (e: any) {
-      Alert.alert('Error', e?.message || 'SignIn failed !');
+      Alert.alert('Error', e?.message || 'Send failed !');
     }
   });
 
-  const disabled = !isValid || isSubmitting || isPending;
+  const disabled = isSubmitting || isPending;
   return (
     <>
       <View className={'mx-auto mt-12 w-full'}>
@@ -73,10 +72,7 @@ export default function PasswordReset() {
           <Pressable
             disabled={disabled}
             onPress={onSubmit}
-            className={[
-              'rounded-full py-4',
-              disabled ? 'bg-neutral-300 opacity-60' : 'bg-primary-500',
-            ].join(' ')}>
+            className={['rounded-full py-4', disabled ? 'opacity-60' : 'bg-primary-500'].join(' ')}>
             <Text className="text-center text-lg font-semibold text-white">
               {isSubmitting || isPending ? 'Sending...' : 'Update'}
             </Text>
