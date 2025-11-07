@@ -27,7 +27,6 @@
     "icon": "./assets/icon.png",
     "scheme": "food-app",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },

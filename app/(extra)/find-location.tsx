@@ -1,8 +1,19 @@
 import { Button } from '@/components/atoms/Button';
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, Text, View } from 'react-native';
+import { PlaceOption } from '@/app/types/common';
+import LocationComboBox from '../features/location/LocationCombobox';
+import { searchCities } from '@/libs/seed/cities';
+import { useRouter } from 'expo-router';
+import { ROUTES } from '@/constants/route';
 
 export default function FindLocation() {
+  const router = useRouter();
+  const [picked, setPicked] = useState<PlaceOption | null>(null);
+
+  const gotoMainPage = () => {
+    router.push(ROUTES.TABS.index);
+  };
   return (
     <View className="mx-auto h-full w-full bg-white px-8 py-16">
       <View className={'mx-auto mt-6 w-full items-center'}>
@@ -21,7 +32,18 @@ export default function FindLocation() {
       </View>
 
       <View className={'mt-10 space-y-4'}>
-        <Button variant={'neutral'} label={'Use current location'} className={'rounded-2xl py-3'} />
+        <Button
+          variant={'neutral'}
+          label={'Use current location'}
+          className={'rounded-2xl py-4'}
+          textClassName={'font-medium'}
+          onPress={gotoMainPage}
+        />
+        <LocationComboBox
+          fetcher={searchCities}
+          placeholder="Los Angeles, United States"
+          onSelect={setPicked}
+        />
       </View>
     </View>
   );

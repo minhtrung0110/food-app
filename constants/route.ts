@@ -9,9 +9,12 @@ export const ROUTES = {
     verifyIdentity: `/(auth)/(flow)/verify-identity`,
   },
   TABS: {
-    home: '/(tabs)/home',
+    index: '/(tabs)/index',
     search: '/(tabs)/search',
-    notifications: '/(tabs)/notifications',
+    order: '/(tabs)/order',
     profile: '/(tabs)/profile',
+  },
+  EXTRA: {
+    findLocation: '/(extra)/find-location',
   },
 };

@@ -36,7 +36,7 @@ export default function SignIn() {
       // 2) Sau khi thành công, bọc CẬP NHẬT UI trong transition
       startTransition(() => {
         // ví dụ: điều hướng & set state nặng (nếu có)
-        router.push('/(tabs)');
+        router.push(ROUTES.EXTRA.findLocation);
         reset({ email: '', password: '' });
       });
     } catch (e: any) {
