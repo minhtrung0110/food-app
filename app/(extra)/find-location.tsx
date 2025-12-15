@@ -2,10 +2,11 @@ import { Button } from '@/components/atoms/Button';
 import React, { useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import { PlaceOption } from '@/app/types/common';
-import LocationComboBox from '../features/location/LocationCombobox';
+
 import { searchCities } from '@/libs/seed/cities';
 import { useRouter } from 'expo-router';
 import { ROUTES } from '@/constants/route';
+import LocationComboBox from '@/features/location/LocationCombobox';
 
 export default function FindLocation() {
   const router = useRouter();

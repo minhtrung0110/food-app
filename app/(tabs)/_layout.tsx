@@ -32,7 +32,7 @@ export default function TabsLayout() {
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
           paddingHorizontal: 10,
-          height: 94,
+          height: 64,
           overflow: 'hidden',
           borderWidth: 1,
           borderColor: '#f8f8f8',

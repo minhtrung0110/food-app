@@ -5,6 +5,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { useEffect } from 'react';
 import { ConfirmProvider } from '@/providers/ConfirmProvider';
 import { StatusBar } from 'expo-status-bar';
+import AppBottomSheet from '@/components/orangism/AppBottomSheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function RootLayout() {
   const { ready, accessToken, boot } = authStore(
@@ -18,7 +20,7 @@ export default function RootLayout() {
   if (!ready) return null;
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBar hidden={false} />
       <ConfirmProvider>
         <Stack screenOptions={{ headerShown: false }}>
@@ -31,6 +33,7 @@ export default function RootLayout() {
           {/*/>*/}
         </Stack>
       </ConfirmProvider>
-    </>
+      <AppBottomSheet />
+    </GestureHandlerRootView>
   );
 }
