@@ -19,8 +19,9 @@ import { FadingEdge } from '@/components/atoms/FadingEdge';
 import { FlashList } from '@shopify/flash-list';
 import { AdoInput } from '@/components/atoms/Input/AdoInput';
 import useDebounce from '@/hooks/useDebounce';
-import { runOnJS, useDerivedValue } from 'react-native-reanimated';
+import { useDerivedValue } from 'react-native-reanimated';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
+import { scheduleOnRN } from 'react-native-worklets';
 
 // Component
 
@@ -39,7 +40,7 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
   const { contentType, closeBottomSheet } = useBottomSheetStore();
   const listRef = useRef<FlashList<any>>(null);
   // State
-  const [showList, setShowList] = useState<boolean>(true);
+  const [showList, setShowList] = useState<boolean>(Platform.OS === 'ios');
   const [searchValue, setSearchValue] = useState<string>('ho chi minh');
   const { data, isLoading, error } = useSearchLocation({
     q: searchValue,
@@ -78,10 +79,13 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
   };
 
   useDerivedValue(() => {
+    'worklet';
     // @ts-ignore
     const _animation = animatedPosition['_animation'];
-    if (_animation && _animation?.current === _animation?.toValue) {
-      runOnJS(onBottomsheetMounted)();
+
+    if (_animation && _animation.current === _animation.toValue) {
+      scheduleOnRN(onBottomsheetMounted); // không có args
+      // nếu có args: scheduleOnRN(onBottomsheetMounted, arg1, arg2)
     }
   }, []);
   return (
@@ -115,7 +119,7 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
             showsVerticalScrollIndicator={true}
             ref={listRef}
             fadingEdgeLength={6}
-            estimatedItemSize={46}
+            // estimatedItemSize={46}
             contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 48 }}
             ItemSeparatorComponent={() => (
               <View className={'py-3'}>
@@ -142,13 +146,17 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
               </TouchableOpacity>
             )}
             ListEmptyComponent={
-              <View className={'items-center justify-center pt-6'}>
-                <Text className={'text-xl font-semibold'}>No search results</Text>
-                <Text className={'pb-4 text-base'} style={{ color: '#777E90' }}>
-                  Check spelling or try new search
-                </Text>
+              <View className={'items-center justify-center gap-6 pt-6'}>
+                <View className={'flex items-center gap-2'}>
+                  <Text className={'text-xl font-semibold'}>No search results</Text>
+                  <Text className={'text-base text-neutral-100'}>
+                    Check spelling or try new search
+                  </Text>
+                </View>
+
                 <Image
                   source={require('@/assets/images/find-location.png')}
+                  className={'mt-8'}
                   style={{ width: 170, height: 170, resizeMode: 'contain' }}
                 />
               </View>

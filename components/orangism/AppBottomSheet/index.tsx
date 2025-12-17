@@ -133,7 +133,7 @@ const AppBottomSheet = ({
       keyboardBehavior={'extend'}>
       {Platform.OS === 'android' || contentType ? (
         <BottomSheetView
-          className={'rounded-t-2xl'}
+          className={'rounded-t-2xl border'}
           style={[
             {
               backgroundColor: COLOR.white,
