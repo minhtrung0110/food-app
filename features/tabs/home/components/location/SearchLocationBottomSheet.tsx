@@ -4,6 +4,7 @@ import useBottomSheetStore from '@/stores/bottom-sheet/store';
 import React, { useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  FlatList,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -41,15 +42,16 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
   // State
   const [showList, setShowList] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>('ho chi minh');
-  const { data, isLoading, error } = useSearchLocation({
+  const { data, isLoading, isFetching, error, refetch } = useSearchLocation({
     q: searchValue,
     limit: 10,
     countrycodes: 'vn',
     language: 'vi',
   });
+  const listData = data ?? [];
+  const isBusy = isLoading || isFetching;
 
   // Handle
-  console.log('List data: ', data);
   const onSearch = useDebounce((text: string) => {
     setSearchValue(text);
   }, 300);
@@ -110,50 +112,108 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 40}>
         {showList ? (
-          <FlashList
-            indicatorStyle={'black'}
-            showsVerticalScrollIndicator={true}
-            ref={listRef}
-            fadingEdgeLength={6}
-            estimatedItemSize={46}
-            contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 48 }}
-            ItemSeparatorComponent={() => (
-              <View className={'py-3'}>
-                <View
-                  className={'w-full'}
-                  style={{ height: 1, backgroundColor: COLOR.neutral['42'] }}
-                />
-              </View>
-            )}
-            data={data}
-            keyExtractor={(item) => String(item.place_id)}
-            renderItem={({ item: [place_id, display_name, address] }) => (
-              <TouchableOpacity
-                activeOpacity={0.5}
-                hitSlop={10}
-                className={'flex-row items-center gap-4'}
-                onPress={() => onSelect({ place_id, display_name })}>
-                <Text className={'text-base font-medium text-neutral-800'}>{display_name}</Text>
-                {address && (
-                  <Text className={'text-sm italic'}>
-                    {address.city || address.town || address.village}
+          Platform.OS === 'web' ? (
+            <FlatList
+              indicatorStyle={'black'}
+              showsVerticalScrollIndicator={true}
+              contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 48 }}
+              ItemSeparatorComponent={() => (
+                <View className={'py-3'}>
+                  <View
+                    className={'w-full'}
+                    style={{ height: 1, backgroundColor: COLOR.neutral['42'] }}
+                  />
+                </View>
+              )}
+              data={listData}
+              refreshing={isBusy}
+              onRefresh={refetch}
+              keyboardShouldPersistTaps="handled"
+              keyExtractor={(item) => String(item.place_id)}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  hitSlop={10}
+                  className={'flex-row items-center gap-4'}
+                  onPress={() => onSelect({ place_id: item.place_id, display_name: item.display_name })}>
+                  <Text className={'text-base font-medium text-neutral-800'}>{item.display_name}</Text>
+                  {item.address && (
+                    <Text className={'text-sm italic'}>
+                      {item.address.city || item.address.town || item.address.village}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              )}
+              ListEmptyComponent={
+                <View className={'items-center justify-center pt-6'}>
+                  <Text className={'text-xl font-semibold'}>
+                    {isBusy ? 'Searching…' : error ? 'Search failed' : 'No search results'}
                   </Text>
-                )}
-              </TouchableOpacity>
-            )}
-            ListEmptyComponent={
-              <View className={'items-center justify-center pt-6'}>
-                <Text className={'text-xl font-semibold'}>No search results</Text>
-                <Text className={'pb-4 text-base'} style={{ color: '#777E90' }}>
-                  Check spelling or try new search
-                </Text>
-                <Image
-                  source={require('@/assets/images/find-location.png')}
-                  style={{ width: 170, height: 170, resizeMode: 'contain' }}
-                />
-              </View>
-            }
-          />
+                  <Text className={'pb-4 text-base'} style={{ color: '#777E90' }}>
+                    {error
+                      ? 'Please try again in a moment.'
+                      : 'Check spelling or try a new search'}
+                  </Text>
+                  <Image
+                    source={require('@/assets/images/find-location.png')}
+                    style={{ width: 170, height: 170, resizeMode: 'contain' }}
+                  />
+                </View>
+              }
+            />
+          ) : (
+            <FlashList
+              indicatorStyle={'black'}
+              showsVerticalScrollIndicator={true}
+              ref={listRef}
+              fadingEdgeLength={6}
+              estimatedItemSize={46}
+              contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 48 }}
+              ItemSeparatorComponent={() => (
+                <View className={'py-3'}>
+                  <View
+                    className={'w-full'}
+                    style={{ height: 1, backgroundColor: COLOR.neutral['42'] }}
+                  />
+                </View>
+              )}
+              data={listData}
+              refreshing={isBusy}
+              onRefresh={refetch}
+              keyboardShouldPersistTaps="handled"
+              keyExtractor={(item) => String(item.place_id)}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  hitSlop={10}
+                  className={'flex-row items-center gap-4'}
+                  onPress={() => onSelect({ place_id: item.place_id, display_name: item.display_name })}>
+                  <Text className={'text-base font-medium text-neutral-800'}>{item.display_name}</Text>
+                  {item.address && (
+                    <Text className={'text-sm italic'}>
+                      {item.address.city || item.address.town || item.address.village}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              )}
+              ListEmptyComponent={
+                <View className={'items-center justify-center pt-6'}>
+                  <Text className={'text-xl font-semibold'}>
+                    {isBusy ? 'Searching…' : error ? 'Search failed' : 'No search results'}
+                  </Text>
+                  <Text className={'pb-4 text-base'} style={{ color: '#777E90' }}>
+                    {error
+                      ? 'Please try again in a moment.'
+                      : 'Check spelling or try a new search'}
+                  </Text>
+                  <Image
+                    source={require('@/assets/images/find-location.png')}
+                    style={{ width: 170, height: 170, resizeMode: 'contain' }}
+                  />
+                </View>
+              }
+            />
+          )
         ) : (
           <ActivityIndicator animating={true} className={'mt-4'} size={20} />
         )}
