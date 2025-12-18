@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { authStore } from '@/stores/auth';
 
-export const api = axios.create({ baseURL: 'https://api.example.com' });
+export const api = axios.create({ baseURL: 'https://api-ec.artstack.online' });
 
 let refreshLock: Promise<string | null> | null = null;
 
