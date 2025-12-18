@@ -11,6 +11,7 @@ import {
 import React, { RefObject, useState } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { COLOR } from '@/constants/Colors';
+import { cn } from '@/utils/style';
 
 interface InputProps {
   label?: string;
@@ -60,15 +61,10 @@ export const AdoInput = ({
 
       <TouchableOpacity onPress={onPress} activeOpacity={onPress ? 0.8 : 1}>
         <View
-          className={
-            'flex-row items-center justify-center gap-1 overflow-hidden rounded-xl border px-3'
-          }
-          style={[
-            {
-              borderColor: isFocus ? COLOR.primary['500'] : COLOR.neutral['100'],
-            },
-            style,
-          ]}>
+          className={cn(
+            'flex-row items-center justify-center gap-1 overflow-hidden rounded-xl border-2 px-3',
+            isFocus ? 'border-blue-200' : 'border-neutral-50'
+          )}>
           {startAdornment}
           {control && name ? (
             <Controller

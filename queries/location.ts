@@ -1,9 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-  NominatimPlace,
-  searchLocation,
-  SearchLocationOptions,
-} from '@/services/location/nominatim';
+import { NominatimPlace, SearchLocationOptions } from '@/services/location/nominatim';
+import { keepPreviousData } from '@tanstack/query-core';
+import { searchLocationPhoton } from '@/services/location/photon';
 
 export function useSearchLocation(opts: SearchLocationOptions) {
   const q = (opts.q ?? '').trim();
@@ -21,10 +19,8 @@ export function useSearchLocation(opts: SearchLocationOptions) {
       opts.addressdetails === false ? 0 : 1,
       opts.dedupe === false ? 0 : 1,
     ],
-    queryFn: ({ signal }) => searchLocation({ ...opts, q }, signal),
-    enabled: q.length > 0, // không search khi rỗng
-    staleTime: 30_000, // basic: cache 30s (tuỳ bạn)
-    gcTime: 5 * 60_000, // basic: giữ cache 5 phút (tuỳ bạn)
-    retry: 0, // search thường không retry (tuỳ bạn)
+    queryFn: ({ signal }) => searchLocationPhoton({ ...opts, q }, signal),
+    enabled: q.length > 2,
+    placeholderData: keepPreviousData,
   });
 }

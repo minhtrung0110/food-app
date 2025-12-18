@@ -22,6 +22,10 @@ import useDebounce from '@/hooks/useDebounce';
 import { useDerivedValue } from 'react-native-reanimated';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { scheduleOnRN } from 'react-native-worklets';
+import { IconLocation } from '@/components/atoms/Icons/filled';
+import { useAppStore } from '@/stores/app/store';
+import { NominatimPlace } from '@/services/location/photon';
+import { useShallow } from 'zustand/react/shallow';
 
 // Component
 
@@ -37,40 +41,38 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
   const { height } = useWindowDimensions();
   const viewport = useSafeAreaInsets();
   const { animatedPosition } = useBottomSheet();
-  const { contentType, closeBottomSheet } = useBottomSheetStore();
+  const { closeBottomSheet } = useBottomSheetStore();
+  const { location, setLocation } = useAppStore(
+    useShallow((state) => ({
+      setLocation: state.setLocation,
+      location: state.location,
+    }))
+  );
+
   const listRef = useRef<FlashList<any>>(null);
   // State
   const [showList, setShowList] = useState<boolean>(Platform.OS === 'ios');
-  const [searchValue, setSearchValue] = useState<string>('ho chi minh');
+  const [keyword, setKeyword] = useState(location?.address?.city || '');
+  const debouncedKeyword = useDebounce(keyword, 1200);
+
   const { data, isLoading, error } = useSearchLocation({
-    q: searchValue,
+    q: debouncedKeyword,
     limit: 10,
     countrycodes: 'vn',
     language: 'vi',
   });
 
   // Handle
-  console.log('List data: ', data);
-  const onSearch = useDebounce((text: string) => {
-    setSearchValue(text);
-  }, 300);
 
-  const onSelect = (data: { display_name: string; place_id: number }) => {
-    // switch (contentType) {
-    //   case 'select_start_point':
-    //     setCountry(data, ECountryType.START_POINT);
-    //     break;
-    //   case 'select_end_point':
-    //     setCountry(data, ECountryType.END_POINT);
-    //     break;
-    //   case 'select_residence':
-    //     setInfo({residence: data.code});
-    //     break;
-    //   case 'select_nationality':
-    //     setInfo({nationality: data.code});
-    //     break;
-    // }
-    console.log('Selected location: ', data);
+  const onSelect = (item: NominatimPlace) => {
+    setLocation({
+      place_id: item.place_id,
+      display_name: item.display_name,
+      lat: item.lat,
+      lon: item.lon,
+      address: item.address,
+    });
+
     closeBottomSheet();
   };
 
@@ -88,6 +90,7 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
       // nếu có args: scheduleOnRN(onBottomsheetMounted, arg1, arg2)
     }
   }, []);
+
   return (
     <View className={'gap-4'} style={{ height: 0.9 * height - viewport.top - viewport.bottom }}>
       <View className={'gap-2 px-4'}>
@@ -105,7 +108,7 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
           startAdornment={<IconSearch />}
           inputProps={{
             placeholder: 'Enter location name',
-            onChangeText: onSearch,
+            onChangeText: (text) => setKeyword(text),
           }}
         />
       </View>
@@ -120,7 +123,11 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
             ref={listRef}
             fadingEdgeLength={6}
             // estimatedItemSize={46}
-            contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 48 }}
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              paddingBottom: 48,
+              paddingTop: 16,
+            }}
             ItemSeparatorComponent={() => (
               <View className={'py-3'}>
                 <View
@@ -131,18 +138,24 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
             )}
             data={data}
             keyExtractor={(item) => String(item.place_id)}
-            renderItem={({ item: [place_id, display_name, address] }) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 activeOpacity={0.5}
                 hitSlop={10}
-                className={'flex-row items-center gap-4'}
-                onPress={() => onSelect({ place_id, display_name })}>
-                <Text className={'text-base font-medium text-neutral-800'}>{display_name}</Text>
-                {address && (
-                  <Text className={'text-sm italic'}>
-                    {address.city || address.town || address.village}
+                className={'flex-row items-start gap-1'}
+                onPress={() => onSelect(item)}>
+                <IconLocation width={26} height={26} color={COLOR.neutral['100']} />
+                <View className={'flex-1 flex-col items-start gap-1'}>
+                  <Text className={'text-base font-medium text-neutral-700'}>
+                    {item.display_name}
                   </Text>
-                )}
+
+                  {item.address && (
+                    <Text className={'text-sm italic'}>
+                      {item.address.city || item.address.town || item.address.village}
+                    </Text>
+                  )}
+                </View>
               </TouchableOpacity>
             )}
             ListEmptyComponent={
