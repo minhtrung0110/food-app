@@ -35,8 +35,11 @@ export interface PartnerCard extends GPartner {
 
 const IMG_SUBWAY = require('@/assets/images/partners/subway.png');
 const IMG_TACOBELL = require('@/assets/images/partners/tacobell.png');
-const IMG_KFC = require('@/assets/images/partners/kfc.jpeg');
+const IMG_KFC = require('@/assets/images/partners/kfc.png');
 const IMG_JOLIBEE = require('@/assets/images/partners/jolibee.png');
+const IMG_BURGERKING = require('@/assets/images/partners/burgerking.png');
+const IMG_STARBUCK = require('@/assets/images/partners/starbuck.png');
+const IMG_MCDONALD = require('@/assets/images/partners/Mcdoneel.png');
 
 export const partnersSampleMore: PartnerCard[] = [
   {
@@ -52,7 +55,7 @@ export const partnersSampleMore: PartnerCard[] = [
     freeShipping: true,
     deliveryFee: 0,
     etaMin: 16,
-    image: IMG_SUBWAY,
+    image: IMG_BURGERKING,
     cuisines: ['Burger', 'Rice', 'Spaghetti'],
     ordersCount: 18240,
   },
@@ -69,7 +72,7 @@ export const partnersSampleMore: PartnerCard[] = [
     freeShipping: false,
     deliveryFee: 1.49,
     etaMin: 14,
-    image: IMG_TACOBELL,
+    image: IMG_MCDONALD,
     cuisines: ['Fastfood', 'Burger', 'Fries'],
     ordersCount: 25400,
   },
@@ -120,7 +123,7 @@ export const partnersSampleMore: PartnerCard[] = [
     freeShipping: false,
     deliveryFee: 1.99,
     etaMin: 12,
-    image: IMG_TACOBELL,
+    image: IMG_STARBUCK,
     cuisines: ['Coffee', 'Tea', 'Bakery'],
     ordersCount: 20950,
   },

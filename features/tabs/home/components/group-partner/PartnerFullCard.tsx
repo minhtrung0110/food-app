@@ -1,13 +1,11 @@
-import { partnersSample } from '@/libs/seed/partner';
 import { Text, View } from 'react-native';
 import { AppImage } from '@/components/atoms/AppImage';
 import React from 'react';
 import { IconCurrency, IconLocation, IconShield, IconStar } from '@/components/atoms/Icons/filled';
 import { COLOR } from '@/constants/Colors';
+import { PartnerCard } from '@/libs/seed/group-partner';
 
-type Partner = (typeof partnersSample)[number];
-
-export const PartnerFullCard = ({ item }: { item: Partner }) => {
+export const PartnerFullCard = ({ item }: { item: PartnerCard }) => {
   const isOpen = item.status === 'open';
   return (
     <View className="gap-4">
@@ -15,7 +13,7 @@ export const PartnerFullCard = ({ item }: { item: Partner }) => {
       <View className="overflow-hidden rounded-2xl bg-neutral-100">
         <AppImage
           source={item.image}
-          className="aspect-3/2 min-h-[160px] w-full max-w-full"
+          className="aspect-3/2 h-auto w-full max-w-full object-cover"
           contentFit="cover"
         />
       </View>
@@ -39,10 +37,17 @@ export const PartnerFullCard = ({ item }: { item: Partner }) => {
               }>
               {isOpen ? 'Open' : 'Close'}
             </Text>
-            <Text className="text-neutral-50">•</Text>
-            <Text numberOfLines={1} className="flex-1 text-sm font-medium text-neutral-100">
-              {item.cityStateZip}
-            </Text>
+
+            <View className="flex-row flex-wrap items-center gap-2">
+              {item.cuisines.map((chd, index) => (
+                <View key={index} className="flex-row items-center gap-1">
+                  <Text className="px-2 text-neutral-100">•</Text>
+                  <Text numberOfLines={1} className="text-sm font-medium text-neutral-500">
+                    {chd}
+                  </Text>
+                </View>
+              ))}
+            </View>
           </View>
         </View>
 
@@ -57,13 +62,13 @@ export const PartnerFullCard = ({ item }: { item: Partner }) => {
           </View>
           <Text className="text-neutral-50">•</Text>
           {/* Distance */}
-          <IconLocation width={20} height={20} />
+          <IconLocation width={20} height={20} color={COLOR.neutral['50']} />
           <Text className="text-[14px] leading-5 font-semibold text-neutral-800">
             {item.distanceKm.toFixed(1)}km
           </Text>
           <Text className="text-neutral-50">•</Text>
           {/* Free shipping */}
-          <IconCurrency width={20} height={20} />
+          <IconCurrency width={20} height={20} color={COLOR.neutral['50']} />
           {item.freeShipping ? (
             <Text className="text-[14px] leading-5 font-semibold text-neutral-800">
               Free shipping

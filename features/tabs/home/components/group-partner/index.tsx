@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import ListPartner from '@/features/tabs/home/components/group-partner/ListPartner';
 import { sortPartnersByTab } from '@/features/tabs/home/components/group-partner/helper';
-import { partnersSampleMore, PartnerTab } from '@/libs/seed/group-partner';
+import { partnersSampleMore } from '@/libs/seed/group-partner';
 import { View } from 'react-native';
 import { TabsItem, UITabs } from '@/components/molecules/tabs';
 
 const GroupPartner = () => {
-  const [tab, setTab] = useState<PartnerTab>('nearby');
   const items: TabsItem[] = [
     {
       key: 'nearby',

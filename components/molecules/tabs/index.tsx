@@ -1,3 +1,4 @@
+import { cn } from '@/utils/style';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { LayoutChangeEvent, Pressable, Text, View } from 'react-native';
 import Animated, {
@@ -15,25 +16,24 @@ export type TabsItem<K extends string = string> = {
 };
 
 type TabLayout = { x: number; width: number };
+type LabelLayout = { x: number; width: number };
 
 type UITabsProps<K extends string = string> = {
   items: TabsItem<K>[];
-  value?: K; // controlled
-  defaultValue?: K; // uncontrolled
+  value?: K;
+  defaultValue?: K;
   onChange?: (key: K) => void;
 
-  /** style hooks */
   tabBarClassName?: string;
   tabItemClassName?: string;
   contentClassName?: string;
 
-  /** animation */
   durationMs?: number;
   indicatorHeight?: number;
   indicatorColor?: string;
 
-  /** make indicator shorter like design */
-  indicatorWidthRatio?: number; // 0..1 (default 0.55)
+  /** thêm padding 2 bên underline (giống antd) */
+  indicatorPaddingX?: number;
 };
 
 export function UITabs<K extends string = string>({
@@ -48,8 +48,8 @@ export function UITabs<K extends string = string>({
 
   durationMs = 220,
   indicatorHeight = 2,
-  indicatorColor = '#F59E0B', // ~ amber-500
-  indicatorWidthRatio = 0.55,
+  indicatorColor = '#F59E0B',
+  indicatorPaddingX = 6,
 }: UITabsProps<K>) {
   const isControlled = value != null;
 
@@ -61,24 +61,22 @@ export function UITabs<K extends string = string>({
   const [innerKey, setInnerKey] = useState<K>(initialKey);
   const activeKey = (isControlled ? (value as K) : innerKey) ?? initialKey;
 
-  const layoutsRef = useRef<Record<string, TabLayout>>({});
+  const tabLayoutsRef = useRef<Record<string, TabLayout>>({});
+  const labelLayoutsRef = useRef<Record<string, LabelLayout>>({});
   const readyRef = useRef(false);
 
   const indX = useSharedValue(0);
   const indW = useSharedValue(0);
 
   const setIndicator = (key: K, animate: boolean) => {
-    const layout = layoutsRef.current[key];
-    if (!layout) return;
+    const tab = tabLayoutsRef.current[key];
+    const label = labelLayoutsRef.current[key];
+    if (!tab || !label) return;
 
-    const rawW = layout.width;
-    const w = Math.max(18, rawW * indicatorWidthRatio);
-    const x = layout.x + (rawW - w) / 2;
+    const w = Math.max(18, label.width + indicatorPaddingX * 2);
+    const x = tab.x + label.x - indicatorPaddingX;
 
-    const cfg = {
-      duration: durationMs,
-      easing: Easing.out(Easing.cubic),
-    };
+    const cfg = { duration: durationMs, easing: Easing.out(Easing.cubic) };
 
     if (animate) {
       indX.value = withTiming(x, cfg);
@@ -95,23 +93,31 @@ export function UITabs<K extends string = string>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeKey]);
 
+  const tryReady = () => {
+    const hasTab = !!tabLayoutsRef.current[activeKey];
+    const hasLabel = !!labelLayoutsRef.current[activeKey];
+    if (!readyRef.current && hasTab && hasLabel) {
+      readyRef.current = true;
+      setIndicator(activeKey, false); // sync lần đầu không animate để khỏi “nhảy”
+    }
+  };
+
   const onTabLayout = (key: K) => (e: LayoutChangeEvent) => {
     const { x, width } = e.nativeEvent.layout;
-    layoutsRef.current[key] = { x, width };
+    tabLayoutsRef.current[key] = { x, width };
+    tryReady();
+  };
 
-    // First time: sync indicator without animation to avoid "jump"
-    const hasActive = !!layoutsRef.current[activeKey];
-    if (!readyRef.current && hasActive) {
-      readyRef.current = true;
-      setIndicator(activeKey, false);
-    }
+  const onLabelLayout = (key: K) => (e: LayoutChangeEvent) => {
+    const { x, width } = e.nativeEvent.layout;
+    labelLayoutsRef.current[key] = { x, width };
+    tryReady();
   };
 
   const onPressTab = (key: K, disabled?: boolean) => {
     if (disabled) return;
     if (!isControlled) setInnerKey(key);
     onChange?.(key);
-    // indicator will animate by effect once state changes
   };
 
   const indicatorStyle = useAnimatedStyle(() => ({
@@ -126,7 +132,6 @@ export function UITabs<K extends string = string>({
 
   return (
     <View>
-      {/* Tab bar */}
       <View className={tabBarClassName}>
         <View className="relative flex-row items-center justify-between py-6">
           {items.map((it) => {
@@ -138,14 +143,15 @@ export function UITabs<K extends string = string>({
                 onLayout={onTabLayout(it.key)}
                 disabled={it.disabled}
                 hitSlop={8}
-                className={tabItemClassName}
+                className={cn('flex-1 items-center', tabItemClassName)}
                 style={{ opacity: it.disabled ? 0.45 : 1 }}
                 accessibilityRole="tab"
                 accessibilityState={{ selected: isActive, disabled: !!it.disabled }}>
                 <Text
+                  onLayout={onLabelLayout(it.key)}
                   className={[
-                    'text-base font-semibold',
-                    isActive ? 'text-amber-500' : 'text-neutral-900',
+                    'text-base leading-5 font-semibold',
+                    isActive ? 'text-primary-500' : 'text-neutral-900',
                   ].join(' ')}>
                   {it.label}
                 </Text>
@@ -153,15 +159,16 @@ export function UITabs<K extends string = string>({
             );
           })}
 
-          {/* Indicator */}
-          <Animated.View style={[{ position: 'absolute', bottom: 0, left: 0 }, indicatorStyle]} />
+          {/* Indicator: bỏ w-full để không “đè” width animated */}
+          <Animated.View
+            className={'h-0.5 rounded-full'}
+            style={[{ position: 'absolute', bottom: 0, left: 0 }, indicatorStyle]}
+          />
         </View>
 
-        {/* (optional) divider like design subtle */}
         <View className="bg-neutral-42 h-px" />
       </View>
 
-      {/* Content */}
       <View className={contentClassName}>{activeItem?.children}</View>
     </View>
   );
