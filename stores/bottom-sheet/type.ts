@@ -2,6 +2,9 @@ export type TBottomSheetContentType =
   | 'search_product'
   | 'filter_product'
   | 'search_location'
+  | 'list_best_partner'
+  | 'list_partner'
+  | 'list_category'
   | null;
 
 interface IBottomSheetMeta {

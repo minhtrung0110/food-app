@@ -12,6 +12,7 @@ import { Indicator } from '@/components/orangism/AppBottomSheet/indicator';
 import useBottomSheetStore from '@/stores/bottom-sheet/store';
 import { COLOR } from '@/constants/Colors';
 import SearchLocationBottomSheet from '@/features/tabs/home/components/location/SearchLocationBottomSheet';
+import ListPartnerBottomSheet from '@/features/tabs/home/components/partner/ListPartner';
 
 export interface BottomSheetProps {
   height?: number;
@@ -82,6 +83,8 @@ const AppBottomSheet = ({
         return <SearchLocationBottomSheet />;
       case 'search_location':
         return <SearchLocationBottomSheet />;
+      case 'list_best_partner':
+        return <ListPartnerBottomSheet />;
       // case 'check_eligibility':
       //   return <EligibilityBottomSheet/>
       // case 'contact_information':

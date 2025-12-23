@@ -31,8 +31,6 @@ type UITabsProps<K extends string = string> = {
   durationMs?: number;
   indicatorHeight?: number;
   indicatorColor?: string;
-
-  /** thêm padding 2 bên underline (giống antd) */
   indicatorPaddingX?: number;
 };
 

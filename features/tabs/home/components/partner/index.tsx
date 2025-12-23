@@ -1,16 +1,23 @@
 // Libraries
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { partnersSample } from '@/libs/seed/partner';
 import { PartnerCard } from '@/features/tabs/home/components/partner/PartnerCard';
+import useBottomSheetStore from '@/stores/bottom-sheet/store';
 
 const PartnerSection: React.FC = () => {
+  const setContentType = useBottomSheetStore((state) => state.setContentType);
+  const onPressSeeAll = () => {
+    setContentType('list_best_partner');
+  };
   return (
     <View className="rounded-2xl bg-white shadow-sm">
       {/* Header */}
       <View className="border-neutral-42 flex-row items-center justify-between border-b p-5">
         <Text className="text-base leading-6 font-bold text-neutral-800">Best Partners</Text>
-        <Text className="text-[14px] leading-5 font-medium text-neutral-800">See all</Text>
+        <Pressable hitSlop={30} onPress={onPressSeeAll}>
+          <Text className="text-[14px] leading-5 font-medium text-neutral-800">See all</Text>
+        </Pressable>
       </View>
 
       {/* Content */}

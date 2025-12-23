@@ -5,7 +5,7 @@ import React from 'react';
 import { IconShield, IconStar } from '@/components/atoms/Icons/filled';
 import { COLOR } from '@/constants/Colors';
 
-type Partner = (typeof partnersSample)[number];
+export type Partner = (typeof partnersSample)[number];
 
 export const PartnerCard = ({ item }: { item: Partner }) => {
   const isOpen = item.status === 'open';
