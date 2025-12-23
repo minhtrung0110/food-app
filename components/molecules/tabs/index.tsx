@@ -40,7 +40,7 @@ export function UITabs<K extends string = string>({
   defaultValue,
   onChange,
 
-  tabBarClassName = 'bg-white px-6 pt-4',
+  tabBarClassName = 'bg-white ',
   tabItemClassName = 'py-3',
   contentClassName = '',
 
@@ -131,7 +131,7 @@ export function UITabs<K extends string = string>({
   return (
     <View>
       <View className={tabBarClassName}>
-        <View className="relative flex-row items-center justify-between py-6">
+        <View className="relative flex-row items-center justify-between px-8 py-6">
           {items.map((it) => {
             const isActive = it.key === activeKey;
             return (

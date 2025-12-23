@@ -39,9 +39,10 @@ const AppBottomSheet = ({
 }: BottomSheetProps) => {
   const { contentType, closeBottomSheet } = useBottomSheetStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const TOP_GAP = 20;
 
   const { top: safeTopArea, bottom: safeBottomArea } = useSafeAreaInsets();
-
+  const topInset = safeTopArea + TOP_GAP;
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -126,20 +127,27 @@ const AppBottomSheet = ({
         />
       )}
       style={[style, { overflow: 'hidden' }]}
+      backgroundStyle={{
+        backgroundColor: COLOR.white,
+        borderTopLeftRadius: 28,
+        borderTopRightRadius: 28,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: '#E5E7EB', // tùy màu
+      }}
       containerStyle={containerStyle}
       handleStyle={{
         position: 'absolute',
         width: '100%',
       }}
-      topInset={safeTopArea}
+      topInset={topInset}
       handleIndicatorStyle={{ backgroundColor: 'transparent' }}
       keyboardBehavior={'extend'}>
       {Platform.OS === 'android' || contentType ? (
         <BottomSheetView
-          className={'rounded-t-2xl border'}
           style={[
             {
-              backgroundColor: COLOR.white,
+              backgroundColor: 'transparent',
               overflow: 'hidden',
             },
             contentStyle,
