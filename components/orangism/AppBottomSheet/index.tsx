@@ -13,6 +13,8 @@ import useBottomSheetStore from '@/stores/bottom-sheet/store';
 import { COLOR } from '@/constants/Colors';
 import SearchLocationBottomSheet from '@/features/tabs/home/components/location/SearchLocationBottomSheet';
 import ListPartnerBottomSheet from '@/features/tabs/home/components/partner/ListPartner';
+import FilterPanelBottomSheet from '@/features/tabs/home/components/filter/sheet/FilterPanelBottomSheet';
+import ListSearchProductBottomSheet from '@/features/tabs/home/components/search/search-product/ListSearchProductBottomSheet';
 
 export interface BottomSheetProps {
   height?: number;
@@ -79,23 +81,14 @@ const AppBottomSheet = ({
   const renderBottomSheetContent = useCallback((contentType: TBottomSheetContentType) => {
     switch (contentType) {
       case 'search_product':
-        return <SearchLocationBottomSheet />;
+        return <ListSearchProductBottomSheet />;
       case 'filter_product':
-        return <SearchLocationBottomSheet />;
+        return <FilterPanelBottomSheet />;
       case 'search_location':
         return <SearchLocationBottomSheet />;
       case 'list_best_partner':
         return <ListPartnerBottomSheet />;
-      // case 'check_eligibility':
-      //   return <EligibilityBottomSheet/>
-      // case 'contact_information':
-      //   return <ContactInformationBottomSheet/>
-      // case 'total_fee':
-      //   return <TotalFeeBottomSheet/>
-      // case 'applicant_information':
-      //   return <ApplicantBottomSheet/>
-      // case 'select_language':
-      //   return <SelectLanguageBottomSheet/>
+
       default:
         return <View style={{ height: 100 }} />;
     }

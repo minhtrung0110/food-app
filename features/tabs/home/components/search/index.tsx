@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SearchProduct } from '@/features/tabs/home/components/search/SearchProduct';
+import { SearchProduct } from '@/features/tabs/home/components/search/search-product/SearchProduct';
 import { SearchLocation } from '@/features/tabs/home/components/location/SearchLocation';
 import { FilterProduct } from '@/features/tabs/home/components/filter/FilterProduct';
 

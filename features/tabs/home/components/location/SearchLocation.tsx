@@ -15,7 +15,7 @@ export const SearchLocation = () => {
       className={'rounded-xl border-2 p-4'}
       style={{ borderColor: COLOR.neutral['01'] }}
       onPress={() => {
-        setContentType('search_product');
+        setContentType('search_location');
       }}>
       <View className={'flex-row items-center gap-3 rounded-2xl bg-white'}>
         <IconSend width={26} height={26} color={COLOR.neutral['50']} />

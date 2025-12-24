@@ -23,7 +23,7 @@ type UITabsProps<K extends string = string> = {
   value?: K;
   defaultValue?: K;
   onChange?: (key: K) => void;
-
+  tabHeaderClassName?: string;
   tabBarClassName?: string;
   tabItemClassName?: string;
   contentClassName?: string;
@@ -39,7 +39,7 @@ export function UITabs<K extends string = string>({
   value,
   defaultValue,
   onChange,
-
+  tabHeaderClassName,
   tabBarClassName = 'bg-white ',
   tabItemClassName = 'py-3',
   contentClassName = '',
@@ -131,7 +131,11 @@ export function UITabs<K extends string = string>({
   return (
     <View>
       <View className={tabBarClassName}>
-        <View className="relative flex-row items-center justify-between px-8 py-6">
+        <View
+          className={cn(
+            'relative flex-row items-center justify-between px-8 py-6',
+            tabHeaderClassName
+          )}>
           {items.map((it) => {
             const isActive = it.key === activeKey;
             return (

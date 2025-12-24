@@ -40,7 +40,7 @@ const IMG_JOLIBEE = require('@/assets/images/partners/jolibee.png');
 const IMG_BURGERKING = require('@/assets/images/partners/burgerking.png');
 const IMG_STARBUCK = require('@/assets/images/partners/starbuck.png');
 const IMG_MCDONALD = require('@/assets/images/partners/Mcdoneel.png');
-
+const IMG_PIZZAHUT = require('@/assets/images/partners/pizzahurt.jpg');
 export const partnersSampleMore: PartnerCard[] = [
   {
     id: 5,
@@ -89,7 +89,7 @@ export const partnersSampleMore: PartnerCard[] = [
     freeShipping: false,
     deliveryFee: 0.99,
     etaMin: 22,
-    image: IMG_JOLIBEE,
+    image: IMG_PIZZAHUT,
     cuisines: ['Pizza', 'Pasta', 'Wings'],
     ordersCount: 14830,
   },

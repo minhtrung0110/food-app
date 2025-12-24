@@ -1,7 +1,7 @@
 // Libraries
 import { IconClose, IconSearch } from '@/components/atoms/Icons/outline';
 import useBottomSheetStore from '@/stores/bottom-sheet/store';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -49,7 +49,6 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
     }))
   );
 
-  const listRef = useRef<FlashList<any>>(null);
   // State
   const [showList, setShowList] = useState<boolean>(Platform.OS === 'ios');
   const [keyword, setKeyword] = useState(location?.address?.city || '');
@@ -120,7 +119,6 @@ const SearchLocationBottomSheet: React.FC<Props> = (props) => {
           <FlashList
             indicatorStyle={'black'}
             showsVerticalScrollIndicator={true}
-            ref={listRef}
             fadingEdgeLength={6}
             // estimatedItemSize={46}
             contentContainerStyle={{
