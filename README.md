@@ -29,18 +29,22 @@ Food App is a production-ready, cross-platform mobile application for food disco
 ## Tech Stack
 
 **Frontend**
+
 - Expo SDK 54 + React Native 0.81
 - Expo Router (file-based navigation)
 - NativeWind (Tailwind CSS for React Native)
 - React Native Reanimated, Gesture Handler, Safe Area Context
 
 **Backend**
+
 - RESTful API integration via Axios (base URL configured in the app)
 
 **Database**
+
 - External (not in this repository)
 
 **State Management / API / Tools**
+
 - Zustand (global state)
 - TanStack Query (server-state caching)
 - React Hook Form + Zod (form state + validation)
@@ -48,6 +52,7 @@ Food App is a production-ready, cross-platform mobile application for food disco
 - @gorhom/bottom-sheet, FlashList (UI utilities)
 
 **Deployment**
+
 - Expo tooling (EAS build compatible)
 
 ## Project Architecture
@@ -91,11 +96,13 @@ stores/              # Zustand app/auth/bottom-sheet stores
 ## Installation & Setup
 
 ### Requirements
+
 - Node.js (LTS recommended)
 - Yarn 4 (project uses Yarn Berry)
 - Expo CLI / Expo Go (or native build tooling for Android/iOS)
 
 ### Install dependencies
+
 ```bash
 yarn install
 ```
@@ -109,6 +116,7 @@ EXPO_PUBLIC_WEB_HOST=your-domain.example
 ```
 
 Notes:
+
 - `EXPO_PUBLIC_WEB_HOST` is used by the WebView screen to allow/deny external navigation.
 - The API base URL is currently configured in `libs/api.ts`. Replace it with your environment-specific endpoint if required.
 
@@ -123,16 +131,16 @@ yarn web          # Run on web
 
 ## Scripts
 
-| Script | Description |
-| --- | --- |
-| `yarn start` | Start the Expo dev server |
-| `yarn start-clear` | Start Expo and clear cache |
-| `yarn android` | Run on Android device/emulator |
-| `yarn ios` | Run on iOS simulator |
-| `yarn web` | Run the web build |
-| `yarn prebuild` | Generate native projects from Expo config |
-| `yarn lint` | Lint TypeScript/JavaScript + Prettier check |
-| `yarn format` | Fix ESLint and run Prettier |
+| Script             | Description                                 |
+| ------------------ | ------------------------------------------- |
+| `yarn start`       | Start the Expo dev server                   |
+| `yarn start-clear` | Start Expo and clear cache                  |
+| `yarn android`     | Run on Android device/emulator              |
+| `yarn ios`         | Run on iOS simulator                        |
+| `yarn web`         | Run the web build                           |
+| `yarn prebuild`    | Generate native projects from Expo config   |
+| `yarn lint`        | Lint TypeScript/JavaScript + Prettier check |
+| `yarn format`      | Fix ESLint and run Prettier                 |
 
 ## Roadmap
 
@@ -158,3 +166,21 @@ Author: Nguyen Duc Minh Trung
 Email: minhtrung4367@gmail.com  
 LinkedIn: https://www.linkedin.com/in/minhtrung0110/  
 Phone: +84 707 624 367
+
+Use Figma MCP to inspect this frame (top-level only, do not recurse into sub-components):
+@https://www.figma.com/design/6VbZCv7W10O3pZ7N8Dkr3k/Cook---Food---Drink-Delivery-Mobile-App-UI-Kit-Free--Figma-Community---Community-?node-id=636-6466&m=dev
+
+Task: Update `app/(tabs)/(order)/rate.tsx` to match the design.
+
+Context:
+
+- Framework: React Native (Expo)
+- Styling: [NativeWind ]
+- Platform target: iOS + Android
+
+Rules:
+
+- Match spacing, font size, color, and border-radius from Figma exactly
+- Use existing color tokens where possible; only hardcode values if no token matches
+- If a value cannot be matched exactly, use the closest equivalent and leave an inline comment: `// approx: <reason>`
+- Do NOT return unchanged sections

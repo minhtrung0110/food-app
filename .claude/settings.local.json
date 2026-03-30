@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -E '\\\\.\\(json|js|ts|tsx|md\\)$')"
+      "Bash(grep -E '\\\\.\\(json|js|ts|tsx|md\\)$')",
+      "mcp__figma__get_design_context"
     ]
   }
 }
