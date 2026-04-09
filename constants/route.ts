@@ -16,5 +16,7 @@ export const ROUTES = {
   },
   EXTRA: {
     findLocation: '/(extra)/find-location',
+    restaurant: (id: number | string) => `/(extra)/restaurant/${id}`,
+    confirmOrder: '/(extra)/confirm-order',
   },
 };
